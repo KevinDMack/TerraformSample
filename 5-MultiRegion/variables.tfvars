@@ -1,3 +1,3 @@
-primary_region = ""
-secondary_region = ""
-global_region = ""
+primary_region = "usgovvirginia"
+secondary_region = "usgovarizona"
+global_region = "usgovvirginia"

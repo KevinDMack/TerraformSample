@@ -1,7 +1,0 @@
-{
-    "deployment_code": "us1",
-    "subscription_id": "xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx",
-    "location": "USGov Virginia",
-    "cloud_environment_name": "USGovernment",
-    "resource_group": "SUS7VA1-Packer"
-}
