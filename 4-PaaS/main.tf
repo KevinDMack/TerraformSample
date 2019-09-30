@@ -5,10 +5,6 @@ provider "azurerm" {
 resource "azurerm_resource_group" "paas-rg" {
     name     = "PaaSEnvironment"
     location = "usgovvirginia"
-
-    tags {
-        environment = "Terraform Demo"
-    }
 }
 
 resource "azurerm_app_service_plan" "asp" {
@@ -21,9 +17,6 @@ resource "azurerm_app_service_plan" "asp" {
     size = "S1"
   }
 
-  tags {
-        environment = "Terraform Demo"
-    }
 }
 
 resource "azurerm_app_service" "as" {
@@ -37,19 +30,11 @@ resource "azurerm_app_service" "as" {
     scm_type                 = "LocalGit"
   }
 
-  app_settings {
-    "Label" = "Default"
-  }
-
   connection_string {
     name  = "Database"
     type  = "SQLServer"
     value = "Server=some-server.mydomain.com;Integrated Security=SSPI"
   }
-
-  tags {
-        environment = "Terraform Demo"
-    }
 }
 
 resource "azurerm_app_service_slot" "prod" {
@@ -61,10 +46,6 @@ resource "azurerm_app_service_slot" "prod" {
 
   site_config {
     dotnet_framework_version = "v4.0"
-  }
-
-  app_settings {
-    "Label" = "Production"
   }
 
   connection_string {
@@ -93,10 +74,6 @@ resource "azurerm_app_service_slot" "dev" {
     dotnet_framework_version = "v4.0"
   }
 
-  app_settings {
-    "Label" = "Development"
-  }
-
   connection_string {
     name  = "Database"
     type  = "SQLServer"
@@ -123,10 +100,6 @@ resource "azurerm_sql_server" "sqlserver" {
   version                      = "12.0"
   administrator_login          = "4dm1n157r470r"
   administrator_login_password = "${element(random_string.DatabasePassword.*.result, count.index)}"
-
-  tags {
-    environment = "Terraform Demo"
-  }
 }
 
 resource "azurerm_sql_database" "devsqldatabase" {
@@ -134,10 +107,6 @@ resource "azurerm_sql_database" "devsqldatabase" {
   resource_group_name = "${azurerm_resource_group.paas-rg.name}"
   location            = "usgovvirginia"
   server_name         = "${azurerm_sql_server.sqlserver.name}"
-
-  tags {
-    environment = "Terraform Demo"
-  }
 }
 
 resource "azurerm_sql_database" "prodsqldatabase" {
@@ -145,10 +114,6 @@ resource "azurerm_sql_database" "prodsqldatabase" {
   resource_group_name = "${azurerm_resource_group.paas-rg.name}"
   location            = "usgovvirginia"
   server_name         = "${azurerm_sql_server.sqlserver.name}"
-
-  tags {
-    environment = "Terraform Demo"
-  }
 }
 
 output "Database Password" {

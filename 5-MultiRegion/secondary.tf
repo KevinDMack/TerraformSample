@@ -1,10 +1,6 @@
 resource "azurerm_resource_group" "availability-secondary-rg" {
     name = "AvailabilityDemo-secondary"
     location = "${var.secondary_region}"
-
-    tags {
-        environment = "Demo"
-    }
 }
 
 resource "azurerm_virtual_network" "secondary-vnet" {
@@ -12,9 +8,6 @@ resource "azurerm_virtual_network" "secondary-vnet" {
     location = "${azurerm_resource_group.availability-secondary-rg.location}"
     resource_group_name = "${azurerm_resource_group.availability-secondary-rg.name}"
     address_space = ["10.0.0.0/16"]   
-    tags {
-        environment = "Demo"
-    }
 }
 
 resource "azurerm_subnet" "secondary-subnet" {
@@ -30,10 +23,6 @@ resource "azurerm_public_ip" "secondary-pip" {
   resource_group_name          = "${azurerm_resource_group.availability-secondary-rg.name}"
   public_ip_address_allocation = "dynamic"
   domain_name_label = "kmack-secondarysite"
-
-  tags {
-        environment = "Demo"
-    }
 }
 
 resource "azurerm_application_gateway" "secondary-appgateway" {
@@ -71,7 +60,7 @@ resource "azurerm_application_gateway" "secondary-appgateway" {
 
   backend_address_pool {
     name        = "AppService"
-    "fqdn_list" = ["${azurerm_app_service.secondary-as.name}.azurewebsites.us"]
+    fqdn_list = ["${azurerm_app_service.secondary-as.name}.azurewebsites.us"]
   }
 
   http_listener {
@@ -109,9 +98,6 @@ resource "azurerm_application_gateway" "secondary-appgateway" {
     backend_http_settings_name = "http"
   }
 
-  tags {
-        environment = "Demo"
-    }
 }
 
 resource "azurerm_app_service_plan" "secondary-asp" {
@@ -124,9 +110,6 @@ resource "azurerm_app_service_plan" "secondary-asp" {
     size = "S1"
   }
 
-  tags {
-        environment = "Demo"
-    }
 }
 
 resource "azurerm_app_service" "secondary-as" {
@@ -140,18 +123,11 @@ resource "azurerm_app_service" "secondary-as" {
     scm_type                 = "LocalGit"
   }
 
-  app_settings {
-    "Label" = "Default"
-  }
-
   connection_string {
     name  = "Database"
     type  = "SQLServer"
     value = ""
   }
 
-  tags {
-        environment = "Demo"
-    }
 }
 

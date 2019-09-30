@@ -12,10 +12,6 @@ resource "azurerm_storage_account" "storage-acct" {
     location                 = "${azurerm_resource_group.rg.location}"
     account_replication_type = "GRS"
     account_tier             = "Standard"
-
-    tags = {
-        environment = "AzureGovVideo"
-    }
 }
 
 resource "azurerm_storage_container" "img-container" {

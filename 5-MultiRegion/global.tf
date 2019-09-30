@@ -1,10 +1,6 @@
 resource "azurerm_resource_group" "availability-global-rg" {
     name = "AvailabilityDemo-global"
     location = "${var.global_region}"
-
-    tags {
-        environment = "Demo"
-    }
 }
 
 resource "azurerm_traffic_manager_profile" "traffic-manager" {
@@ -22,10 +18,6 @@ resource "azurerm_traffic_manager_profile" "traffic-manager" {
     port     = 80
     path     = "/"
   }
-
-  tags {
-        environment = "Demo"
-    }
 }
 
 resource "azurerm_traffic_manager_endpoint" "tm-endpoint-primary" {

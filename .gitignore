@@ -8,3 +8,4 @@ crash.log
 plan.txt
 *.log
 terraform.tfstate
+5-MultiRegion/.terraform.tfstate.lock.info

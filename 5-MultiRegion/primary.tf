@@ -1,10 +1,6 @@
 resource "azurerm_resource_group" "availability-primary-rg" {
     name = "AvailabilityDemo-Primary"
     location = "${var.primary_region}"
-
-    tags {
-        environment = "Demo"
-    }
 }
 
 resource "azurerm_virtual_network" "primary-vnet" {
@@ -12,9 +8,6 @@ resource "azurerm_virtual_network" "primary-vnet" {
     location = "${azurerm_resource_group.availability-primary-rg.location}"
     resource_group_name = "${azurerm_resource_group.availability-primary-rg.name}"
     address_space = ["10.0.0.0/16"]   
-    tags {
-        environment = "Demo"
-    }
 }
 
 resource "azurerm_subnet" "primary-subnet" {
@@ -30,10 +23,6 @@ resource "azurerm_public_ip" "primary-pip" {
   resource_group_name          = "${azurerm_resource_group.availability-primary-rg.name}"
   public_ip_address_allocation = "dynamic"
   domain_name_label = "kmack-primarysite"
-
-  tags {
-        environment = "Demo"
-    }
 }
 
 resource "azurerm_application_gateway" "primary-appgateway" {
@@ -71,7 +60,7 @@ resource "azurerm_application_gateway" "primary-appgateway" {
 
   backend_address_pool {
     name        = "AppService"
-    "fqdn_list" = ["${azurerm_app_service.primary-as.name}.azurewebsites.us"]
+    fqdn_list = ["${azurerm_app_service.primary-as.name}.azurewebsites.us"]
   }
 
   http_listener {
@@ -109,9 +98,6 @@ resource "azurerm_application_gateway" "primary-appgateway" {
     backend_http_settings_name = "http"
   }
 
-  tags {
-        environment = "Demo"
-    }
 }
 
 resource "azurerm_app_service_plan" "primary-asp" {
@@ -124,9 +110,6 @@ resource "azurerm_app_service_plan" "primary-asp" {
     size = "S1"
   }
 
-  tags {
-        environment = "Demo"
-    }
 }
 
 resource "azurerm_app_service" "primary-as" {
@@ -140,18 +123,11 @@ resource "azurerm_app_service" "primary-as" {
     scm_type                 = "LocalGit"
   }
 
-  app_settings {
-    "Label" = "Default"
-  }
-
   connection_string {
     name  = "Database"
     type  = "SQLServer"
     value = ""
   }
 
-  tags {
-        environment = "Demo"
-    }
 }
 
