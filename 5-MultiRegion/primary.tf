@@ -29,6 +29,7 @@ resource "azurerm_public_ip" "primary-pip" {
   location                     = "${azurerm_resource_group.availability-primary-rg.location}"
   resource_group_name          = "${azurerm_resource_group.availability-primary-rg.name}"
   public_ip_address_allocation = "dynamic"
+  domain_name_label = "kmack-primarysite"
 
   tags {
         environment = "Demo"

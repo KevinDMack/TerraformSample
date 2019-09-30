@@ -29,6 +29,7 @@ resource "azurerm_public_ip" "secondary-pip" {
   location                     = "${azurerm_resource_group.availability-secondary-rg.location}"
   resource_group_name          = "${azurerm_resource_group.availability-secondary-rg.name}"
   public_ip_address_allocation = "dynamic"
+  domain_name_label = "kmack-secondarysite"
 
   tags {
         environment = "Demo"
