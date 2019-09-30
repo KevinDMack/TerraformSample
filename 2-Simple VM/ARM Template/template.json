@@ -1,0 +1,349 @@
+{
+    "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+        "virtualMachines_singlevm_name": {
+            "defaultValue": "singlevm",
+            "type": "String"
+        },
+        "networkInterfaces_vm_nic_name": {
+            "defaultValue": "vm-nic",
+            "type": "String"
+        },
+        "publicIPAddresses_vm_pip_name": {
+            "defaultValue": "vm-pip",
+            "type": "String"
+        },
+        "networkSecurityGroups_vm_nsg_name": {
+            "defaultValue": "vm-nsg",
+            "type": "String"
+        },
+        "virtualNetworks_singlevm_vnet_name": {
+            "defaultValue": "singlevm-vnet",
+            "type": "String"
+        },
+        "storageAccounts_diagfc80ea09f2340587_name": {
+            "defaultValue": "diagfc80ea09f2340587",
+            "type": "String"
+        },
+        "subnets_default_name": {
+            "defaultValue": "default",
+            "type": "String"
+        },
+        "securityRules_ssh_name": {
+            "defaultValue": "ssh",
+            "type": "String"
+        },
+        "virtualMachines_singlevm_id": {
+            "defaultValue": "/subscriptions/{Subscription-ID}/resourceGroups/SingleVM/providers/Microsoft.Compute/disks/singlevm_os_disk",
+            "type": "String"
+        }
+    },
+    "variables": {},
+    "resources": [
+        {
+            "comments": "Generalized from resource: '/subscriptions/{Subscription-ID}/resourceGroups/SingleVM/providers/Microsoft.Compute/virtualMachines/singlevm'.",
+            "type": "Microsoft.Compute/virtualMachines",
+            "name": "[parameters('virtualMachines_singlevm_name')]",
+            "apiVersion": "2018-10-01",
+            "location": "usgovvirginia",
+            "tags": {
+                "environment": "Terraform Demo"
+            },
+            "scale": null,
+            "properties": {
+                "hardwareProfile": {
+                    "vmSize": "Standard_DS1_v2"
+                },
+                "storageProfile": {
+                    "imageReference": {
+                        "publisher": "Canonical",
+                        "offer": "UbuntuServer",
+                        "sku": "16.04.0-LTS",
+                        "version": "latest"
+                    },
+                    "osDisk": {
+                        "osType": "Linux",
+                        "name": "[concat(parameters('virtualMachines_singlevm_name'),'_os_disk')]",
+                        "createOption": "FromImage",
+                        "caching": "ReadWrite",
+                        "writeAcceleratorEnabled": false,
+                        "managedDisk": {
+                            "storageAccountType": "Premium_LRS",
+                            "id": "[parameters('virtualMachines_singlevm_id')]"
+                        },
+                        "diskSizeGB": 30
+                    },
+                    "dataDisks": []
+                },
+                "osProfile": {
+                    "computerName": "[parameters('virtualMachines_singlevm_name')]",
+                    "adminUsername": "uadmin",
+                    "linuxConfiguration": {
+                        "disablePasswordAuthentication": true,
+                        "ssh": {
+                            "publicKeys": [
+                                {
+                                    "path": "/home/uadmin/.ssh/authorized_keys",
+                                    "keyData": "{Your ssh key}"
+                                }
+                            ]
+                        },
+                        "provisionVMAgent": true
+                    },
+                    "secrets": [],
+                    "allowExtensionOperations": true
+                },
+                "networkProfile": {
+                    "networkInterfaces": [
+                        {
+                            "id": "[resourceId('Microsoft.Network/networkInterfaces', parameters('networkInterfaces_vm_nic_name'))]",
+                            "properties": {
+                                "primary": false
+                            }
+                        }
+                    ]
+                },
+                "diagnosticsProfile": {
+                    "bootDiagnostics": {
+                        "enabled": true,
+                        "storageUri": "[concat('https', '://', parameters('storageAccounts_diagfc80ea09f2340587_name'), '.blob.core.usgovcloudapi.net', '/')]"
+                    }
+                }
+            },
+            "dependsOn": [
+                "[resourceId('Microsoft.Network/networkInterfaces', parameters('networkInterfaces_vm_nic_name'))]",
+                "[resourceId('Microsoft.Storage/storageAccounts', parameters('storageAccounts_diagfc80ea09f2340587_name'))]"
+            ]
+        },
+        {
+            "comments": "Generalized from resource: '/subscriptions/{Subscription-ID}/resourceGroups/SingleVM/providers/Microsoft.Network/networkInterfaces/vm-nic'.",
+            "type": "Microsoft.Network/networkInterfaces",
+            "name": "[parameters('networkInterfaces_vm_nic_name')]",
+            "apiVersion": "2018-12-01",
+            "location": "usgovvirginia",
+            "tags": {
+                "environment": "Terraform Demo"
+            },
+            "scale": null,
+            "properties": {
+                "provisioningState": "Succeeded",
+                "resourceGuid": "42a22753-051c-44b5-8d05-c58f6eb0bbf3",
+                "ipConfigurations": [
+                    {
+                        "name": "myNicConfiguration",
+                        "etag": "W/\"c91cc0d8-e144-481a-9d1c-bc5bb19e079d\"",
+                        "properties": {
+                            "provisioningState": "Succeeded",
+                            "privateIPAddress": "10.0.2.4",
+                            "privateIPAllocationMethod": "Dynamic",
+                            "publicIPAddress": {
+                                "id": "[resourceId('Microsoft.Network/publicIPAddresses', parameters('publicIPAddresses_vm_pip_name'))]"
+                            },
+                            "subnet": {
+                                "id": "[resourceId('Microsoft.Network/virtualNetworks/subnets', parameters('virtualNetworks_singlevm_vnet_name'), parameters('subnets_default_name'))]"
+                            },
+                            "primary": true,
+                            "privateIPAddressVersion": "IPv4"
+                        }
+                    }
+                ],
+                "dnsSettings": {
+                    "dnsServers": [],
+                    "appliedDnsServers": [],
+                    "internalDomainNameSuffix": "gp4ld2m0b11utdvrq3ltqrmnyf.ax.internal.usgovcloudapp.net"
+                },
+                "macAddress": "00-1D-D8-00-3A-0B",
+                "enableAcceleratedNetworking": false,
+                "enableIPForwarding": false,
+                "networkSecurityGroup": {
+                    "id": "[resourceId('Microsoft.Network/networkSecurityGroups', parameters('networkSecurityGroups_vm_nsg_name'))]"
+                },
+                "primary": true,
+                "tapConfigurations": []
+            },
+            "dependsOn": [
+                "[resourceId('Microsoft.Network/publicIPAddresses', parameters('publicIPAddresses_vm_pip_name'))]",
+                "[resourceId('Microsoft.Network/virtualNetworks/subnets', parameters('virtualNetworks_singlevm_vnet_name'), parameters('subnets_default_name'))]",
+                "[resourceId('Microsoft.Network/networkSecurityGroups', parameters('networkSecurityGroups_vm_nsg_name'))]"
+            ]
+        },
+        {
+            "comments": "Generalized from resource: '/subscriptions/{Subscription-ID}/resourceGroups/SingleVM/providers/Microsoft.Network/networkSecurityGroups/vm-nsg'.",
+            "type": "Microsoft.Network/networkSecurityGroups",
+            "name": "[parameters('networkSecurityGroups_vm_nsg_name')]",
+            "apiVersion": "2018-12-01",
+            "location": "usgovvirginia",
+            "tags": {},
+            "scale": null,
+            "properties": {
+                "provisioningState": "Succeeded",
+                "resourceGuid": "9fe6444e-b3af-4afc-a9b1-9288cf305c8a",
+                "securityRules": [
+                    {
+                        "name": "ssh",
+                        "etag": "W/\"06bf4946-11de-46c5-b58e-3b57f5c972a7\"",
+                        "properties": {
+                            "provisioningState": "Succeeded",
+                            "protocol": "Tcp",
+                            "sourcePortRange": "*",
+                            "destinationPortRange": "22",
+                            "sourceAddressPrefix": "*",
+                            "destinationAddressPrefix": "*",
+                            "access": "Allow",
+                            "priority": 100,
+                            "direction": "Outbound",
+                            "sourcePortRanges": [],
+                            "destinationPortRanges": [],
+                            "sourceAddressPrefixes": [],
+                            "destinationAddressPrefixes": []
+                        }
+                    }
+                ]
+            },
+            "dependsOn": []
+        },
+        {
+            "comments": "Generalized from resource: '/subscriptions/{Subscription-ID}/resourceGroups/SingleVM/providers/Microsoft.Network/publicIPAddresses/vm-pip'.",
+            "type": "Microsoft.Network/publicIPAddresses",
+            "sku": {
+                "name": "Basic",
+                "tier": "Regional"
+            },
+            "name": "[parameters('publicIPAddresses_vm_pip_name')]",
+            "apiVersion": "2018-12-01",
+            "location": "usgovvirginia",
+            "tags": {
+                "environment": "Terraform Demo"
+            },
+            "scale": null,
+            "properties": {
+                "provisioningState": "Succeeded",
+                "resourceGuid": "bf2a3c14-9970-4033-8944-f854b494c619",
+                "ipAddress": "52.247.162.230",
+                "publicIPAddressVersion": "IPv4",
+                "publicIPAllocationMethod": "Dynamic",
+                "idleTimeoutInMinutes": 4,
+                "ipTags": []
+            },
+            "dependsOn": []
+        },
+        {
+            "comments": "Generalized from resource: '/subscriptions/{Subscription-ID}/resourceGroups/SingleVM/providers/Microsoft.Network/virtualNetworks/singlevm-vnet'.",
+            "type": "Microsoft.Network/virtualNetworks",
+            "name": "[parameters('virtualNetworks_singlevm_vnet_name')]",
+            "apiVersion": "2018-12-01",
+            "location": "usgovvirginia",
+            "tags": {
+                "environment": "Terraform Demo"
+            },
+            "scale": null,
+            "properties": {
+                "provisioningState": "Succeeded",
+                "resourceGuid": "f1b1fc33-0e9a-49f7-8eb1-875738458dc5",
+                "addressSpace": {
+                    "addressPrefixes": [
+                        "10.0.0.0/16"
+                    ]
+                },
+                "dhcpOptions": {
+                    "dnsServers": []
+                },
+                "subnets": [
+                    {
+                        "name": "default",
+                        "etag": "W/\"a0cf1e12-4f52-47e2-9975-8f7889e10399\"",
+                        "properties": {
+                            "provisioningState": "Succeeded",
+                            "addressPrefix": "10.0.2.0/24",
+                            "serviceEndpoints": [],
+                            "delegations": []
+                        }
+                    }
+                ],
+                "virtualNetworkPeerings": [],
+                "enableDdosProtection": false,
+                "enableVmProtection": false
+            },
+            "dependsOn": []
+        },
+        {
+            "comments": "Generalized from resource: '/subscriptions/{Subscription-ID}/resourceGroups/SingleVM/providers/Microsoft.Storage/storageAccounts/diagfc80ea09f2340587'.",
+            "type": "Microsoft.Storage/storageAccounts",
+            "sku": {
+                "name": "Standard_LRS",
+                "tier": "Standard"
+            },
+            "kind": "Storage",
+            "name": "[parameters('storageAccounts_diagfc80ea09f2340587_name')]",
+            "apiVersion": "2018-07-01",
+            "location": "usgovvirginia",
+            "tags": {
+                "environment": "Terraform Demo"
+            },
+            "scale": null,
+            "properties": {
+                "networkAcls": {
+                    "bypass": "AzureServices",
+                    "virtualNetworkRules": [],
+                    "ipRules": [],
+                    "defaultAction": "Allow"
+                },
+                "supportsHttpsTrafficOnly": false,
+                "encryption": {
+                    "services": {
+                        "file": {
+                            "enabled": true
+                        },
+                        "blob": {
+                            "enabled": true
+                        }
+                    },
+                    "keySource": "Microsoft.Storage"
+                }
+            },
+            "dependsOn": []
+        },
+        {
+            "comments": "Generalized from resource: '/subscriptions/{Subscription-ID}/resourceGroups/SingleVM/providers/Microsoft.Network/networkSecurityGroups/vm-nsg/securityRules/ssh'.",
+            "type": "Microsoft.Network/networkSecurityGroups/securityRules",
+            "name": "[concat(parameters('networkSecurityGroups_vm_nsg_name'), '/', parameters('securityRules_ssh_name'))]",
+            "apiVersion": "2018-12-01",
+            "scale": null,
+            "properties": {
+                "provisioningState": "Succeeded",
+                "protocol": "Tcp",
+                "sourcePortRange": "*",
+                "destinationPortRange": "22",
+                "sourceAddressPrefix": "*",
+                "destinationAddressPrefix": "*",
+                "access": "Allow",
+                "priority": 100,
+                "direction": "Outbound",
+                "sourcePortRanges": [],
+                "destinationPortRanges": [],
+                "sourceAddressPrefixes": [],
+                "destinationAddressPrefixes": []
+            },
+            "dependsOn": [
+                "[resourceId('Microsoft.Network/networkSecurityGroups', parameters('networkSecurityGroups_vm_nsg_name'))]"
+            ]
+        },
+        {
+            "comments": "Generalized from resource: '/subscriptions/{Subscription-ID}/resourceGroups/SingleVM/providers/Microsoft.Network/virtualNetworks/singlevm-vnet/subnets/default'.",
+            "type": "Microsoft.Network/virtualNetworks/subnets",
+            "name": "[concat(parameters('virtualNetworks_singlevm_vnet_name'), '/', parameters('subnets_default_name'))]",
+            "apiVersion": "2018-12-01",
+            "scale": null,
+            "properties": {
+                "provisioningState": "Succeeded",
+                "addressPrefix": "10.0.2.0/24",
+                "serviceEndpoints": [],
+                "delegations": []
+            },
+            "dependsOn": [
+                "[resourceId('Microsoft.Network/virtualNetworks', parameters('virtualNetworks_singlevm_vnet_name'))]"
+            ]
+        }
+    ]
+}
