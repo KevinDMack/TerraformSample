@@ -99,7 +99,7 @@ resource "azurerm_sql_server" "sqlserver" {
   location                     = "usgovvirginia"
   version                      = "12.0"
   administrator_login          = "4dm1n157r470r"
-  administrator_login_password = "${element(random_string.DatabasePassword.*.result, count.index)}"
+  administrator_login_password = "${random_string.DatabasePassword.result}"
 }
 
 resource "azurerm_sql_database" "devsqldatabase" {
@@ -116,6 +116,6 @@ resource "azurerm_sql_database" "prodsqldatabase" {
   server_name         = "${azurerm_sql_server.sqlserver.name}"
 }
 
-output "Database Password" {
+output "DatabasePasswordOutput" {
     value = "${random_string.DatabasePassword.*.result}"
 }
