@@ -1,0 +1,60 @@
+{
+    "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentParameters.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+        "extensions_LinuxDiagnostic_storageAccountName": {
+            "value": null
+        },
+        "extensions_LinuxDiagnostic_storageAccountKey": {
+            "value": null
+        },
+        "extensions_LinuxDiagnostic_storageAccountName_1": {
+            "value": null
+        },
+        "extensions_LinuxDiagnostic_storageAccountKey_1": {
+            "value": null
+        },
+        "publicIPAddresses_kmackarmdemo_gateway_ip_domainNameLabel": {
+            "value": null
+        },
+        "virtualMachines_kmackvm1_name": {
+            "value": null
+        },
+        "virtualMachines_kmackarm2_name": {
+            "value": null
+        },
+        "storageAccounts_demoarmdiag_name": {
+            "value": null
+        },
+        "networkInterfaces_kmackvm169_name": {
+            "value": null
+        },
+        "publicIPAddresses_kmackvm1_ip_name": {
+            "value": null
+        },
+        "virtualNetworks_Demo_Arm_vnet_name": {
+            "value": null
+        },
+        "networkInterfaces_kmackarm2964_name": {
+            "value": null
+        },
+        "publicIPAddresses_kmackarm2_ip_name": {
+            "value": null
+        },
+        "availabilitySets_demo_arm_avset_name": {
+            "value": null
+        },
+        "networkSecurityGroups_kmackvm1_nsg_name": {
+            "value": null
+        },
+        "networkSecurityGroups_kmackarm2_nsg_name": {
+            "value": null
+        },
+        "applicationGateways_kmackarmdemo_gateway_name": {
+            "value": null
+        },
+        "publicIPAddresses_kmackarmdemo_gateway_ip_name": {
+            "value": null
+        }
+    }
+}
