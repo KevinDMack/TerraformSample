@@ -100,6 +100,7 @@ resource "azurerm_storage_account" "stgacct" {
   }
 }
 
+
 resource "azurerm_virtual_machine" "vm" {
   name                  = "singlevm"
   location              = "usgovvirginia"

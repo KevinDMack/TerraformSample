@@ -102,7 +102,7 @@
             "value": "kmack"
         },
         "adminPassword": {
-            "value": ""
+            "value": "P@ssw0rd1234"
         },
         "diagnosticsStorageAccountName": {
             "value": "simplearmdiag"
