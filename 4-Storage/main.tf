@@ -1,5 +1,5 @@
 provider "azurerm" {
-    subscription_id = "7a3a98d5-4b6b-4625-a1e8-3235d432f463"
+    subscription_id = ""
 }
 resource "azurerm_resource_group" "rg" {
         name     = "deploy-mack-storage-rg"
